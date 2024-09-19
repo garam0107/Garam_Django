@@ -1,0 +1,15 @@
+{% extends "articles/base.html" %}
+{% block content %}
+  <h1>Fake Naver</h1>
+  {% comment %} action = 요청을 보낼 서버의 주소
+    method = "GET" -> 기본값 
+  {% endcomment %}
+  <form action="https://search.naver.com/search.naver" method = "GET">
+    <input type="text" name = "query">
+    <input type="submit">
+
+  </form>
+{% endblock content %}
+
+
+
