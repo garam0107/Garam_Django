@@ -7,10 +7,13 @@
 </head>
 <body>
   <h1>Articles</h1>
+  <a href="{% url "articles:new" %}">NEW</a>
   {% comment %} <p>{{ articles }}</p> {% endcomment %}
   {% for article in articles %}
     <p>글 번호: {{ article.pk }}</p>
-    <p>글 제목: {{ article.title }}</p>
+    <a href="{% url "articles:detail" article.pk %}">
+      <p>글 제목: {{ article.title }}</p>
+    </a>
     <p>글 내용: {{ article.content }}</p>
     <hr>
   {% endfor %}
