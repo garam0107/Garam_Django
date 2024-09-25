@@ -24,35 +24,43 @@ def detail(request, pk):
     return render(request, 'articles/detail.html', context)
 
 
-def new(request):
-    # 게시글 작성 페이지 응답
-    form = ArticleForm()
-    context = {
-        'form' : form,
-    }
-    return render(request, 'articles/new.html',context)
+# def new(request):
+#     # 게시글 작성 페이지 응답
+#     form = ArticleForm()
+#     context = {
+#         'form' : form,
+#     }
+#     return render(request, 'articles/new.html',context)
+
+
+# def create(request):
+#     # 1. 모델폼 인스턴트 생성 - 사용자 입력 데이터 전부를 인자로 작성
+#     form = ArticleForm(request.POST)
+
+#     # 2. 유효성 검사
+#     if form.is_valid():
+#         article = form.save()
+#         return redirect('articles:detail', article.pk)
+#     # 유효성 검사가 실패한 내역이 context에 저장
+#     context = {
+#         'form':form,
+#     }
+#     return render(request, 'articles/new.html', context)
 
 
 def create(request):
-    # 1. 사용자 요청으로부터 입력 데이터를 추출
-    title = request.POST.get('title')
-    content = request.POST.get('content')
-
-    # 저장 1
-    # article = Article()
-    # article.title = title
-    # article.content = content
-    # article.save()
-
-    # 저장 2 
-    article = Article(title=title, content=content)
-    article.save()
-
-    # 저장 3
-    # Article.objects.create(title=title, content=content)
-
-    # return redirect('articles:index')
-    return redirect('articles:detail', article.pk)
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article = form.save()
+            return redirect('articles:detail', article.pk)
+    # 요청 메서드가 POST가 아닐 때로 else문으로 하는 이유는 다른 메서드들이 존재하기 때문
+    else:
+        form = ArticleForm()
+    context = {
+        'form':form,
+    }
+    return render(request, 'articles/create.html', context)
 
 
 def delete(request, pk):
@@ -64,26 +72,48 @@ def delete(request, pk):
     return redirect('articles:index')
 
 
-def edit(request, pk):
-    # 어떤 게시글을 수정할지 조회
+# def edit(request, pk):
+#     # 어떤 게시글을 수정할지 조회
+#     article = Article.objects.get(pk=pk)
+#     form = ArticleForm(instance=article)
+#     context = {
+#         'article': article,
+#         'form' : form,
+#     }
+#     return render(request, 'articles/edit.html', context)
+
+
+# def update(request, pk):
+#     article = Article.objects.get(pk=pk)
+#     # 1. 모델폼 인스턴스 생성(사용자 입력 데이터 & 기존 데이터)
+#     form = ArticleForm(request.POST, instance=article)
+#     # 2. 유효성 검사
+#     if form.is_valid():
+#         form.save()
+#         return redirect('articles:detail', article.pk)
+#     context = {
+#         'article' : article,
+#         'form' : form,
+#     }
+#     return render(request, 'articles/edit.html', context)
+#     # title = request.POST.get('title')
+#     # content = request.POST.get('content')
+#     # article.title = title
+#     # article.content = content
+#     # article.save()
+def update(request,pk):
     article = Article.objects.get(pk=pk)
-    context = {
-        'article': article,
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect('articles:detail', article.pk)
+    else:
+        form = ArticleForm(instance=article)
+    context={
+        'article' : article,
+        'form' : form,
     }
-    return render(request, 'articles/edit.html', context)
-
-
-def update(request, pk):
-    # 1. 어떤 게시글 수정할지 조회
-    article = Article.objects.get(pk=pk)
-    # 2. 사용자로부터 받은 새로운 입력 데이터 추출
-    title = request.POST.get('title')
-    content = request.POST.get('content')
-    # 3. 기존 게시글의 데이터를 사용자로 받은 데이터로 새로 할당
-    article.title = title
-    article.content = content
-    # 4. 저장
-    article.save()
-
-    return redirect('articles:detail', article.pk)
+    return render(request, 'articles/update.html', context)
+    
 

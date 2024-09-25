@@ -6,7 +6,7 @@
   <title>Document</title>
 </head>
 <body>
-  <h1>New</h1>
+  <h1>Create</h1>
   <form action="{% url "articles:create" %}" method="POST">
     {% csrf_token %}
     {{form.as_p}}
