@@ -15,6 +15,7 @@ def index(request):
 
 def detail(request, pk):
     article = Article.objects.get(pk=pk)
+    print(dir(article.image))
     context = {
         'article': article,
     }

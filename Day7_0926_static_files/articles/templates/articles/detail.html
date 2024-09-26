@@ -8,6 +8,7 @@
 <body>
   {% if article.image %}
     <img src="{{article.image.url}}" alt="image">
+    <p>{{article.image.url}}</p>
   {% endif %}
   <h1>Detail</h1>
   <h3>{{ article.pk }}번째 글</h3>
