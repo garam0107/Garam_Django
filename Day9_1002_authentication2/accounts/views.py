@@ -4,6 +4,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm
 from .forms import CustomUserchangeForm, CustomUserCreationForm
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -23,7 +24,7 @@ def login(request):
     }
     return render(request, 'accounts/login.html', context)
 
-
+@login_required
 def logout(request):
     auth_logout(request)
     return redirect('articles:index')
@@ -43,12 +44,13 @@ def signup(request):
         'form':form
     }
     return render(request, 'accounts/signup.html', context)
-
+@login_required
 def delete(request):
     request.user.delete()
+    auth_logout(request)
     return redirect('articles:index')
 
-
+@login_required
 def update(request):
     if request.method == 'POST':
         form = CustomUserchangeForm(request.POST, instance = request.user)
@@ -63,7 +65,7 @@ def update(request):
     }
     return render(request, 'accounts/update.html', context)
 
-
+@login_required
 def change_password(request, user_pk):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
